@@ -4,7 +4,6 @@ namespace MrAbdelaziz\BinanceApi\Tests\Unit;
 
 use MrAbdelaziz\BinanceApi\Services\BinanceApiService;
 use MrAbdelaziz\BinanceApi\Tests\TestCase;
-use Mockery;
 
 class BinanceApiServiceTest extends TestCase
 {
@@ -13,7 +12,7 @@ class BinanceApiServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->service = new BinanceApiService([
             'api_key' => 'test_key',
             'api_secret' => 'test_secret',
@@ -30,7 +29,7 @@ class BinanceApiServiceTest extends TestCase
     public function test_can_get_config()
     {
         $config = $this->service->getConfig();
-        
+
         $this->assertIsArray($config);
         $this->assertEquals('test_key', $config['api_key']);
         $this->assertEquals('test_secret', $config['api_secret']);
@@ -40,14 +39,14 @@ class BinanceApiServiceTest extends TestCase
     public function test_can_get_specific_config_value()
     {
         $apiKey = $this->service->getConfig('api_key');
-        
+
         $this->assertEquals('test_key', $apiKey);
     }
 
     public function test_returns_null_for_invalid_config_key()
     {
         $invalidConfig = $this->service->getConfig('invalid_key');
-        
+
         $this->assertNull($invalidConfig);
     }
 

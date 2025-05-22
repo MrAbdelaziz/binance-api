@@ -2,7 +2,6 @@
 
 namespace MrAbdelaziz\BinanceApi\Services;
 
-use Illuminate\Support\Facades\Cache;
 use MrAbdelaziz\BinanceApi\Exceptions\BinanceApiException;
 
 class AccountService
@@ -30,7 +29,7 @@ class AccountService
         $account = $this->getAccountInfo();
         $balances = $account['balances'] ?? [];
 
-        if (!$includeZero) {
+        if (! $includeZero) {
             $balances = array_filter($balances, function ($balance) {
                 return (float) $balance['free'] > 0 || (float) $balance['locked'] > 0;
             });
@@ -45,7 +44,7 @@ class AccountService
     public function getAssetBalance(string $asset): array
     {
         $balances = $this->getAccountBalances(true);
-        
+
         foreach ($balances as $balance) {
             if ($balance['asset'] === strtoupper($asset)) {
                 return $balance;
@@ -55,7 +54,7 @@ class AccountService
         return [
             'asset' => strtoupper($asset),
             'free' => '0.00000000',
-            'locked' => '0.00000000'
+            'locked' => '0.00000000',
         ];
     }
 
@@ -81,14 +80,14 @@ class AccountService
     public function getCommissionRates(string $symbol): array
     {
         return $this->api->signedRequest('/account/commission', [
-            'symbol' => strtoupper($symbol)
+            'symbol' => strtoupper($symbol),
         ]);
     }
 
     /**
      * Get trading fees for all symbols or specific symbol
      */
-    public function getTradingFees(string $symbol = null): array
+    public function getTradingFees(?string $symbol = null): array
     {
         $params = [];
         if ($symbol) {
@@ -114,7 +113,7 @@ class AccountService
     /**
      * Get deposit history
      */
-    public function getDepositHistory(string $coin = null, array $options = []): array
+    public function getDepositHistory(?string $coin = null, array $options = []): array
     {
         $params = $options;
         if ($coin) {
@@ -127,7 +126,7 @@ class AccountService
     /**
      * Get withdraw history
      */
-    public function getWithdrawHistory(string $coin = null, array $options = []): array
+    public function getWithdrawHistory(?string $coin = null, array $options = []): array
     {
         $params = $options;
         if ($coin) {
@@ -140,7 +139,7 @@ class AccountService
     /**
      * Get deposit address for a coin
      */
-    public function getDepositAddress(string $coin, string $network = null): array
+    public function getDepositAddress(string $coin, ?string $network = null): array
     {
         $params = ['coin' => strtoupper($coin)];
         if ($network) {
@@ -188,7 +187,7 @@ class AccountService
         }
 
         return $this->api->signedRequest('/asset/dust', [
-            'asset' => implode(',', array_map('strtoupper', $assets))
+            'asset' => implode(',', array_map('strtoupper', $assets)),
         ], 'POST');
     }
 
@@ -215,7 +214,7 @@ class AccountService
     /**
      * Get funding wallet balance
      */
-    public function getFundingWallet(string $asset = null, bool $needBtcValuation = false): array
+    public function getFundingWallet(?string $asset = null, bool $needBtcValuation = false): array
     {
         $params = ['needBtcValuation' => $needBtcValuation ? 'true' : 'false'];
         if ($asset) {
@@ -228,7 +227,7 @@ class AccountService
     /**
      * Get user asset information
      */
-    public function getUserAsset(string $asset = null, bool $needBtcValuation = false): array
+    public function getUserAsset(?string $asset = null, bool $needBtcValuation = false): array
     {
         $params = ['needBtcValuation' => $needBtcValuation ? 'true' : 'false'];
         if ($asset) {
@@ -249,7 +248,7 @@ class AccountService
     /**
      * Toggle BNB burn on spot trades and margin interest
      */
-    public function setBnbBurn(bool $spotBnbBurn = null, bool $interestBnbBurn = null): array
+    public function setBnbBurn(?bool $spotBnbBurn = null, ?bool $interestBnbBurn = null): array
     {
         $params = [];
         if ($spotBnbBurn !== null) {

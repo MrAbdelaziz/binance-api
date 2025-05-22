@@ -10,6 +10,7 @@ trait HasSignature
     protected function createSignature(array $params, string $secret): string
     {
         $queryString = http_build_query($params, '', '&');
+
         return hash_hmac('sha256', $queryString, $secret);
     }
 
@@ -36,7 +37,7 @@ trait HasSignature
     {
         $params['timestamp'] = $this->createTimestamp();
         $params['recvWindow'] = $recvWindow;
-        
+
         return $params;
     }
 
@@ -47,7 +48,7 @@ trait HasSignature
     {
         $signature = $this->createSignature($params, $secret);
         $params['signature'] = $signature;
-        
+
         return $params;
     }
 }

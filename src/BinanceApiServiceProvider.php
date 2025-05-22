@@ -3,10 +3,10 @@
 namespace MrAbdelaziz\BinanceApi;
 
 use Illuminate\Support\ServiceProvider;
-use MrAbdelaziz\BinanceApi\Services\BinanceApiService;
 use MrAbdelaziz\BinanceApi\Services\AccountService;
-use MrAbdelaziz\BinanceApi\Services\OrderService;
+use MrAbdelaziz\BinanceApi\Services\BinanceApiService;
 use MrAbdelaziz\BinanceApi\Services\MarketService;
+use MrAbdelaziz\BinanceApi\Services\OrderService;
 use MrAbdelaziz\BinanceApi\Services\PositionService;
 
 class BinanceApiServiceProvider extends ServiceProvider

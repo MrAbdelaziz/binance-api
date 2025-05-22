@@ -2,21 +2,22 @@
 
 namespace MrAbdelaziz\BinanceApi\Tests\Unit;
 
-use MrAbdelaziz\BinanceApi\Services\OrderService;
-use MrAbdelaziz\BinanceApi\Services\BinanceApiService;
-use MrAbdelaziz\BinanceApi\Exceptions\BinanceApiException;
-use MrAbdelaziz\BinanceApi\Tests\TestCase;
 use Mockery;
+use MrAbdelaziz\BinanceApi\Exceptions\BinanceApiException;
+use MrAbdelaziz\BinanceApi\Services\BinanceApiService;
+use MrAbdelaziz\BinanceApi\Services\OrderService;
+use MrAbdelaziz\BinanceApi\Tests\TestCase;
 
 class OrderServiceTest extends TestCase
 {
     protected OrderService $orderService;
+
     protected BinanceApiService $mockApiService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->mockApiService = Mockery::mock(BinanceApiService::class);
         $this->orderService = new OrderService($this->mockApiService);
     }
@@ -38,7 +39,7 @@ class OrderServiceTest extends TestCase
         $expectedResponse = [
             'orderId' => 12345,
             'status' => 'FILLED',
-            'executedQty' => '0.001'
+            'executedQty' => '0.001',
         ];
 
         $this->mockApiService
@@ -65,7 +66,7 @@ class OrderServiceTest extends TestCase
 
         $expectedResponse = [
             'orderId' => 12345,
-            'status' => 'NEW'
+            'status' => 'NEW',
         ];
 
         $this->mockApiService
@@ -83,12 +84,12 @@ class OrderServiceTest extends TestCase
     {
         $expectedParams = [
             'symbol' => 'BTCUSDT',
-            'orderId' => 12345
+            'orderId' => 12345,
         ];
 
         $expectedResponse = [
             'orderId' => 12345,
-            'status' => 'CANCELED'
+            'status' => 'CANCELED',
         ];
 
         $this->mockApiService
@@ -114,13 +115,13 @@ class OrderServiceTest extends TestCase
     {
         $expectedParams = [
             'symbol' => 'BTCUSDT',
-            'orderId' => 12345
+            'orderId' => 12345,
         ];
 
         $expectedResponse = [
             'orderId' => 12345,
             'status' => 'FILLED',
-            'executedQty' => '0.001'
+            'executedQty' => '0.001',
         ];
 
         $this->mockApiService
@@ -138,7 +139,7 @@ class OrderServiceTest extends TestCase
     {
         $expectedResponse = [
             ['orderId' => 1, 'symbol' => 'BTCUSDT'],
-            ['orderId' => 2, 'symbol' => 'ETHUSDT']
+            ['orderId' => 2, 'symbol' => 'ETHUSDT'],
         ];
 
         $this->mockApiService
@@ -156,7 +157,7 @@ class OrderServiceTest extends TestCase
     {
         $expectedParams = ['symbol' => 'BTCUSDT'];
         $expectedResponse = [
-            ['orderId' => 1, 'symbol' => 'BTCUSDT']
+            ['orderId' => 1, 'symbol' => 'BTCUSDT'],
         ];
 
         $this->mockApiService

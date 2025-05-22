@@ -2,8 +2,6 @@
 
 namespace MrAbdelaziz\BinanceApi\Services;
 
-use Illuminate\Support\Facades\Cache;
-
 class MarketService
 {
     protected BinanceApiService $api;
@@ -19,7 +17,7 @@ class MarketService
     public function getPrice(string $symbol): array
     {
         return $this->api->publicRequest('/ticker/price', [
-            'symbol' => strtoupper($symbol)
+            'symbol' => strtoupper($symbol),
         ]);
     }
 
@@ -37,7 +35,7 @@ class MarketService
     public function get24hrTicker(string $symbol): array
     {
         return $this->api->publicRequest('/ticker/24hr', [
-            'symbol' => strtoupper($symbol)
+            'symbol' => strtoupper($symbol),
         ]);
     }
 
@@ -52,7 +50,7 @@ class MarketService
     /**
      * Get price change statistics
      */
-    public function getPriceChangeStats(string $symbol = null): array
+    public function getPriceChangeStats(?string $symbol = null): array
     {
         $params = [];
         if ($symbol) {
@@ -65,7 +63,7 @@ class MarketService
     /**
      * Get symbol order book ticker (best price/qty on the order book)
      */
-    public function getBookTicker(string $symbol = null): array
+    public function getBookTicker(?string $symbol = null): array
     {
         $params = [];
         if ($symbol) {
@@ -82,7 +80,7 @@ class MarketService
     {
         return $this->api->publicRequest('/depth', [
             'symbol' => strtoupper($symbol),
-            'limit' => $limit
+            'limit' => $limit,
         ]);
     }
 
@@ -93,18 +91,18 @@ class MarketService
     {
         return $this->api->publicRequest('/trades', [
             'symbol' => strtoupper($symbol),
-            'limit' => $limit
+            'limit' => $limit,
         ]);
     }
 
     /**
      * Get historical trades for a symbol
      */
-    public function getHistoricalTrades(string $symbol, int $limit = 500, int $fromId = null): array
+    public function getHistoricalTrades(string $symbol, int $limit = 500, ?int $fromId = null): array
     {
         $params = [
             'symbol' => strtoupper($symbol),
-            'limit' => $limit
+            'limit' => $limit,
         ];
 
         if ($fromId !== null) {
@@ -147,7 +145,7 @@ class MarketService
     public function getAveragePrice(string $symbol): array
     {
         return $this->api->publicRequest('/avgPrice', [
-            'symbol' => strtoupper($symbol)
+            'symbol' => strtoupper($symbol),
         ]);
     }
 
@@ -181,7 +179,7 @@ class MarketService
     public function getUsdtPairs(): array
     {
         $exchangeInfo = $this->getExchangeInfo();
-        
+
         return array_filter($exchangeInfo['symbols'], function ($symbol) {
             return $symbol['quoteAsset'] === 'USDT' && $symbol['status'] === 'TRADING';
         });
@@ -193,17 +191,18 @@ class MarketService
     public function getMarketCapRanking(int $limit = 100): array
     {
         $tickers = $this->getAll24hrTickers();
-        
+
         // Calculate approximate market cap using volume * price
         $marketCaps = array_map(function ($ticker) {
             $volume = (float) $ticker['volume'];
             $price = (float) $ticker['lastPrice'];
+
             return [
                 'symbol' => $ticker['symbol'],
                 'price' => $price,
                 'volume' => $volume,
                 'marketCap' => $volume * $price,
-                'priceChange' => $ticker['priceChangePercent']
+                'priceChange' => $ticker['priceChangePercent'],
             ];
         }, $tickers);
 
@@ -221,7 +220,7 @@ class MarketService
     public function getTopGainers(int $limit = 20): array
     {
         $tickers = $this->getAll24hrTickers();
-        
+
         // Filter and sort by price change percentage
         $gainers = array_filter($tickers, function ($ticker) {
             return (float) $ticker['priceChangePercent'] > 0;
@@ -240,7 +239,7 @@ class MarketService
     public function getTopLosers(int $limit = 20): array
     {
         $tickers = $this->getAll24hrTickers();
-        
+
         // Filter and sort by price change percentage
         $losers = array_filter($tickers, function ($ticker) {
             return (float) $ticker['priceChangePercent'] < 0;
@@ -259,7 +258,7 @@ class MarketService
     public function getMostActive(int $limit = 20): array
     {
         $tickers = $this->getAll24hrTickers();
-        
+
         // Sort by quote volume (USDT volume)
         usort($tickers, function ($a, $b) {
             return (float) $b['quoteVolume'] <=> (float) $a['quoteVolume'];

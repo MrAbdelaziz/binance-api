@@ -20,7 +20,7 @@ class OrderService
     {
         $requiredFields = ['symbol', 'side', 'type', 'quantity'];
         foreach ($requiredFields as $field) {
-            if (!isset($orderData[$field])) {
+            if (! isset($orderData[$field])) {
                 throw new BinanceApiException("Required field '{$field}' is missing");
             }
         }
@@ -185,18 +185,18 @@ class OrderService
     /**
      * Cancel an order
      */
-    public function cancelOrder(string $symbol, int $orderId = null, string $origClientOrderId = null): array
+    public function cancelOrder(string $symbol, ?int $orderId = null, ?string $origClientOrderId = null): array
     {
         if ($orderId === null && $origClientOrderId === null) {
             throw new BinanceApiException('Either orderId or origClientOrderId must be provided');
         }
 
         $params = ['symbol' => strtoupper($symbol)];
-        
+
         if ($orderId !== null) {
             $params['orderId'] = $orderId;
         }
-        
+
         if ($origClientOrderId !== null) {
             $params['origClientOrderId'] = $origClientOrderId;
         }
@@ -207,18 +207,18 @@ class OrderService
     /**
      * Cancel an OCO order
      */
-    public function cancelOcoOrder(string $symbol, int $orderListId = null, string $listClientOrderId = null): array
+    public function cancelOcoOrder(string $symbol, ?int $orderListId = null, ?string $listClientOrderId = null): array
     {
         if ($orderListId === null && $listClientOrderId === null) {
             throw new BinanceApiException('Either orderListId or listClientOrderId must be provided');
         }
 
         $params = ['symbol' => strtoupper($symbol)];
-        
+
         if ($orderListId !== null) {
             $params['orderListId'] = $orderListId;
         }
-        
+
         if ($listClientOrderId !== null) {
             $params['listClientOrderId'] = $listClientOrderId;
         }
@@ -232,25 +232,25 @@ class OrderService
     public function cancelAllOrders(string $symbol): array
     {
         return $this->api->signedRequest('/openOrders', [
-            'symbol' => strtoupper($symbol)
+            'symbol' => strtoupper($symbol),
         ], 'DELETE');
     }
 
     /**
      * Get order status
      */
-    public function getOrder(string $symbol, int $orderId = null, string $origClientOrderId = null): array
+    public function getOrder(string $symbol, ?int $orderId = null, ?string $origClientOrderId = null): array
     {
         if ($orderId === null && $origClientOrderId === null) {
             throw new BinanceApiException('Either orderId or origClientOrderId must be provided');
         }
 
         $params = ['symbol' => strtoupper($symbol)];
-        
+
         if ($orderId !== null) {
             $params['orderId'] = $orderId;
         }
-        
+
         if ($origClientOrderId !== null) {
             $params['origClientOrderId'] = $origClientOrderId;
         }
@@ -261,7 +261,7 @@ class OrderService
     /**
      * Get all open orders for a symbol or all symbols
      */
-    public function getOpenOrders(string $symbol = null): array
+    public function getOpenOrders(?string $symbol = null): array
     {
         $params = [];
         if ($symbol) {
@@ -287,18 +287,18 @@ class OrderService
     /**
      * Get OCO order status
      */
-    public function getOcoOrder(int $orderListId = null, string $origClientOrderId = null): array
+    public function getOcoOrder(?int $orderListId = null, ?string $origClientOrderId = null): array
     {
         if ($orderListId === null && $origClientOrderId === null) {
             throw new BinanceApiException('Either orderListId or origClientOrderId must be provided');
         }
 
         $params = [];
-        
+
         if ($orderListId !== null) {
             $params['orderListId'] = $orderListId;
         }
-        
+
         if ($origClientOrderId !== null) {
             $params['origClientOrderId'] = $origClientOrderId;
         }

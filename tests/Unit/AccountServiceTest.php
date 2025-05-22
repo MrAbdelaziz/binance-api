@@ -2,20 +2,21 @@
 
 namespace MrAbdelaziz\BinanceApi\Tests\Unit;
 
+use Mockery;
 use MrAbdelaziz\BinanceApi\Services\AccountService;
 use MrAbdelaziz\BinanceApi\Services\BinanceApiService;
 use MrAbdelaziz\BinanceApi\Tests\TestCase;
-use Mockery;
 
 class AccountServiceTest extends TestCase
 {
     protected AccountService $accountService;
+
     protected BinanceApiService $mockApiService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->mockApiService = Mockery::mock(BinanceApiService::class);
         $this->accountService = new AccountService($this->mockApiService);
     }
@@ -38,7 +39,7 @@ class AccountServiceTest extends TestCase
             'updateTime' => 1234567890,
             'accountType' => 'SPOT',
             'balances' => [],
-            'permissions' => ['SPOT']
+            'permissions' => ['SPOT'],
         ];
 
         $this->mockApiService
@@ -58,8 +59,8 @@ class AccountServiceTest extends TestCase
             'balances' => [
                 ['asset' => 'BTC', 'free' => '1.0', 'locked' => '0.0'],
                 ['asset' => 'ETH', 'free' => '0.0', 'locked' => '0.0'],
-                ['asset' => 'USDT', 'free' => '100.0', 'locked' => '50.0']
-            ]
+                ['asset' => 'USDT', 'free' => '100.0', 'locked' => '50.0'],
+            ],
         ];
 
         $this->mockApiService
@@ -80,8 +81,8 @@ class AccountServiceTest extends TestCase
         $accountData = [
             'balances' => [
                 ['asset' => 'BTC', 'free' => '1.0', 'locked' => '0.0'],
-                ['asset' => 'USDT', 'free' => '100.0', 'locked' => '50.0']
-            ]
+                ['asset' => 'USDT', 'free' => '100.0', 'locked' => '50.0'],
+            ],
         ];
 
         $this->mockApiService
@@ -101,8 +102,8 @@ class AccountServiceTest extends TestCase
     {
         $accountData = [
             'balances' => [
-                ['asset' => 'BTC', 'free' => '1.0', 'locked' => '0.0']
-            ]
+                ['asset' => 'BTC', 'free' => '1.0', 'locked' => '0.0'],
+            ],
         ];
 
         $this->mockApiService

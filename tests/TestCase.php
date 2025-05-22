@@ -2,8 +2,8 @@
 
 namespace MrAbdelaziz\BinanceApi\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use MrAbdelaziz\BinanceApi\BinanceApiServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {

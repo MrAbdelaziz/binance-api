@@ -30,7 +30,7 @@ class AccountInfo
             canDeposit: $data['canDeposit'],
             updateTime: $data['updateTime'],
             accountType: $data['accountType'],
-            balances: array_map(fn($balance) => Balance::fromArray($balance), $data['balances']),
+            balances: array_map(fn ($balance) => Balance::fromArray($balance), $data['balances']),
             permissions: $data['permissions']
         );
     }
@@ -47,7 +47,7 @@ class AccountInfo
             'canDeposit' => $this->canDeposit,
             'updateTime' => $this->updateTime,
             'accountType' => $this->accountType,
-            'balances' => array_map(fn($balance) => $balance->toArray(), $this->balances),
+            'balances' => array_map(fn ($balance) => $balance->toArray(), $this->balances),
             'permissions' => $this->permissions,
         ];
     }
@@ -71,7 +71,7 @@ class AccountInfo
      */
     public function getNonZeroBalances(): array
     {
-        return array_filter($this->balances, fn($balance) => $balance->total > 0);
+        return array_filter($this->balances, fn ($balance) => $balance->total > 0);
     }
 
     /**

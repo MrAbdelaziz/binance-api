@@ -19,7 +19,7 @@ class BinanceApiFacadeTest extends TestCase
     {
         // Test that facade methods are accessible by checking the underlying service
         $service = BinanceApi::getFacadeRoot();
-        
+
         $this->assertTrue(method_exists($service, 'account'));
         $this->assertTrue(method_exists($service, 'orders'));
         $this->assertTrue(method_exists($service, 'market'));

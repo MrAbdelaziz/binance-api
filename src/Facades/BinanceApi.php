@@ -3,7 +3,6 @@
 namespace MrAbdelaziz\BinanceApi\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use MrAbdelaziz\BinanceApi\Services\BinanceApiService;
 
 /**
  * @method static \MrAbdelaziz\BinanceApi\Services\AccountService account()
@@ -13,7 +12,7 @@ use MrAbdelaziz\BinanceApi\Services\BinanceApiService;
  * @method static array serverTime()
  * @method static array exchangeInfo()
  * @method static array ping()
- * 
+ *
  * @see \MrAbdelaziz\BinanceApi\Services\BinanceApiService
  */
 class BinanceApi extends Facade

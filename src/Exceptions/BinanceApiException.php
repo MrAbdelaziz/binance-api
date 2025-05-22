@@ -57,6 +57,7 @@ class BinanceApiException extends Exception
     public function isAuthenticationError(): bool
     {
         $authCodes = [-2014, -2015, -1022];
+
         return in_array($this->getBinanceCode(), $authCodes);
     }
 
@@ -66,6 +67,7 @@ class BinanceApiException extends Exception
     public function isRateLimitError(): bool
     {
         $rateLimitCodes = [-1003, -1015];
+
         return in_array($this->getBinanceCode(), $rateLimitCodes);
     }
 
@@ -75,6 +77,7 @@ class BinanceApiException extends Exception
     public function isInsufficientBalanceError(): bool
     {
         $balanceCodes = [-2010, -1013];
+
         return in_array($this->getBinanceCode(), $balanceCodes);
     }
 
@@ -84,6 +87,7 @@ class BinanceApiException extends Exception
     public function isSymbolError(): bool
     {
         $symbolCodes = [-1121, -1100];
+
         return in_array($this->getBinanceCode(), $symbolCodes);
     }
 
@@ -93,7 +97,7 @@ class BinanceApiException extends Exception
     public function getUserFriendlyMessage(): string
     {
         $binanceCode = $this->getBinanceCode();
-        
+
         return match ($binanceCode) {
             -1003 => 'Too many requests. Please wait and try again.',
             -1013 => 'Invalid quantity or amount.',

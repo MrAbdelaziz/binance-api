@@ -23,7 +23,7 @@ class ExceptionTest extends TestCase
     {
         $data = [
             'code' => -1013,
-            'msg' => 'Invalid quantity.'
+            'msg' => 'Invalid quantity.',
         ];
 
         $exception = new BinanceApiException('API Error', 400, $data);
@@ -139,7 +139,7 @@ class ExceptionTest extends TestCase
 
     public function test_rate_limit_exception_defaults()
     {
-        $exception = new RateLimitException();
+        $exception = new RateLimitException;
 
         $this->assertEquals('Rate limit exceeded', $exception->getMessage());
         $this->assertEquals(429, $exception->getCode());

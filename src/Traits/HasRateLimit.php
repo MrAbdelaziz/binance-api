@@ -27,9 +27,9 @@ trait HasRateLimit
         $limit = $this->config['rate_limits']['requests_per_minute'] ?? 1200;
         $key = 'binance_requests_per_minute';
         $window = 60; // seconds
-        
+
         $current = Cache::get($key, 0);
-        
+
         if ($current >= $limit) {
             throw new RateLimitException("Requests per minute limit exceeded: {$current}/{$limit}");
         }
@@ -43,9 +43,9 @@ trait HasRateLimit
         $limit = $this->config['rate_limits']['orders_per_second'] ?? 10;
         $key = 'binance_orders_per_second';
         $window = 1; // second
-        
+
         $current = Cache::get($key, 0);
-        
+
         if ($current >= $limit) {
             throw new RateLimitException("Orders per second limit exceeded: {$current}/{$limit}");
         }
@@ -62,7 +62,7 @@ trait HasRateLimit
         Cache::put($requestKey, $requestCount + 1, 60);
 
         // Update daily order counter
-        $dailyKey = 'binance_orders_daily_' . date('Y-m-d');
+        $dailyKey = 'binance_orders_daily_'.date('Y-m-d');
         $dailyCount = Cache::get($dailyKey, 0);
         Cache::put($dailyKey, $dailyCount + 1, 86400); // 24 hours
     }
@@ -79,13 +79,13 @@ trait HasRateLimit
 
         // Update orders per day counter
         $dailyLimit = $this->config['rate_limits']['orders_per_day'] ?? 200000;
-        $dailyKey = 'binance_orders_daily_' . date('Y-m-d');
+        $dailyKey = 'binance_orders_daily_'.date('Y-m-d');
         $dailyCount = Cache::get($dailyKey, 0);
-        
+
         if ($dailyCount >= $dailyLimit) {
             throw new RateLimitException("Daily order limit exceeded: {$dailyCount}/{$dailyLimit}");
         }
-        
+
         Cache::put($dailyKey, $dailyCount + 1, 86400);
     }
 
@@ -96,7 +96,7 @@ trait HasRateLimit
     {
         $requestsPerMinute = Cache::get('binance_requests_per_minute', 0);
         $ordersPerSecond = Cache::get('binance_orders_per_second', 0);
-        $ordersToday = Cache::get('binance_orders_daily_' . date('Y-m-d'), 0);
+        $ordersToday = Cache::get('binance_orders_daily_'.date('Y-m-d'), 0);
 
         $limits = $this->config['rate_limits'];
 
@@ -126,7 +126,7 @@ trait HasRateLimit
     {
         Cache::forget('binance_requests_per_minute');
         Cache::forget('binance_orders_per_second');
-        Cache::forget('binance_orders_daily_' . date('Y-m-d'));
+        Cache::forget('binance_orders_daily_'.date('Y-m-d'));
     }
 
     /**
@@ -135,12 +135,12 @@ trait HasRateLimit
     protected function throttleIfNeeded(): void
     {
         $status = $this->getRateLimitStatus();
-        
+
         // If requests per minute is above 90%, wait a bit
         if ($status['requests_per_minute']['percentage'] > 90) {
             usleep(500000); // 0.5 seconds
         }
-        
+
         // If orders per second is above 80%, wait
         if ($status['orders_per_second']['percentage'] > 80) {
             sleep(1);

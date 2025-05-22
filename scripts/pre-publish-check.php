@@ -4,14 +4,15 @@
  * Pre-publication verification script
  * Run this script to verify your package is ready for publication
  */
-
 class PrePublishChecker
 {
     private array $errors = [];
+
     private array $warnings = [];
+
     private string $packagePath;
 
-    public function __construct(string $packagePath = __DIR__ . '/..')
+    public function __construct(string $packagePath = __DIR__.'/..')
     {
         $this->packagePath = realpath($packagePath);
     }
@@ -48,7 +49,7 @@ class PrePublishChecker
         ];
 
         foreach ($requiredFiles as $file => $description) {
-            if (!file_exists($this->packagePath . '/' . $file)) {
+            if (! file_exists($this->packagePath.'/'.$file)) {
                 $this->errors[] = "Missing required file: {$file} ({$description})";
             } else {
                 echo "  ✅ {$file}\n";
@@ -62,15 +63,17 @@ class PrePublishChecker
     {
         echo "📦 Checking composer.json...\n";
 
-        $composerFile = $this->packagePath . '/composer.json';
-        if (!file_exists($composerFile)) {
-            $this->errors[] = "composer.json file is missing";
+        $composerFile = $this->packagePath.'/composer.json';
+        if (! file_exists($composerFile)) {
+            $this->errors[] = 'composer.json file is missing';
+
             return;
         }
 
         $composer = json_decode(file_get_contents($composerFile), true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $this->errors[] = "composer.json is not valid JSON";
+            $this->errors[] = 'composer.json is not valid JSON';
+
             return;
         }
 
@@ -86,7 +89,7 @@ class PrePublishChecker
         ];
 
         foreach ($requiredFields as $field => $description) {
-            if (!isset($composer[$field])) {
+            if (! isset($composer[$field])) {
                 $this->errors[] = "Missing required field in composer.json: {$field} ({$description})";
             } else {
                 echo "  ✅ {$field}\n";
@@ -94,8 +97,8 @@ class PrePublishChecker
         }
 
         // Check Laravel auto-discovery
-        if (!isset($composer['extra']['laravel']['providers'])) {
-            $this->warnings[] = "Laravel auto-discovery providers not configured";
+        if (! isset($composer['extra']['laravel']['providers'])) {
+            $this->warnings[] = 'Laravel auto-discovery providers not configured';
         } else {
             echo "  ✅ Laravel auto-discovery configured\n";
         }
@@ -118,7 +121,7 @@ class PrePublishChecker
         ];
 
         foreach ($coreClasses as $class) {
-            if (file_exists($this->packagePath . '/' . $class)) {
+            if (file_exists($this->packagePath.'/'.$class)) {
                 echo "  ✅ {$class}\n";
             } else {
                 $this->errors[] = "Missing core class: {$class}";
@@ -126,7 +129,7 @@ class PrePublishChecker
         }
 
         // Check for vendor directory (shouldn't be committed)
-        if (is_dir($this->packagePath . '/vendor')) {
+        if (is_dir($this->packagePath.'/vendor')) {
             $this->warnings[] = "vendor/ directory exists - make sure it's in .gitignore";
         }
 
@@ -138,10 +141,10 @@ class PrePublishChecker
         echo "📚 Checking documentation...\n";
 
         // Check README content
-        $readmePath = $this->packagePath . '/README.md';
+        $readmePath = $this->packagePath.'/README.md';
         if (file_exists($readmePath)) {
             $readme = file_get_contents($readmePath);
-            
+
             $requiredSections = [
                 'Installation' => '## Installation',
                 'Usage examples' => '```php',
@@ -158,10 +161,10 @@ class PrePublishChecker
         }
 
         // Check if INSTALLATION.md exists
-        if (file_exists($this->packagePath . '/INSTALLATION.md')) {
+        if (file_exists($this->packagePath.'/INSTALLATION.md')) {
             echo "  ✅ Installation guide exists\n";
         } else {
-            $this->warnings[] = "Consider adding detailed INSTALLATION.md";
+            $this->warnings[] = 'Consider adding detailed INSTALLATION.md';
         }
 
         echo "\n";
@@ -180,22 +183,22 @@ class PrePublishChecker
 
         $foundSensitive = false;
         foreach ($sensitiveFiles as $file) {
-            if (file_exists($this->packagePath . '/' . $file)) {
+            if (file_exists($this->packagePath.'/'.$file)) {
                 $this->errors[] = "Sensitive file found: {$file} - should not be committed";
                 $foundSensitive = true;
             }
         }
 
-        if (!$foundSensitive) {
+        if (! $foundSensitive) {
             echo "  ✅ No sensitive files found\n";
         }
 
         // Check .gitignore
-        $gitignorePath = $this->packagePath . '/.gitignore';
+        $gitignorePath = $this->packagePath.'/.gitignore';
         if (file_exists($gitignorePath)) {
             $gitignore = file_get_contents($gitignorePath);
             $importantIgnores = ['.env', 'vendor/', '.idea/'];
-            
+
             foreach ($importantIgnores as $ignore) {
                 if (strpos($gitignore, $ignore) !== false) {
                     echo "  ✅ .gitignore includes {$ignore}\n";
@@ -213,18 +216,19 @@ class PrePublishChecker
         echo "🌐 Checking Git configuration...\n";
 
         // Check if it's a git repository
-        if (!is_dir($this->packagePath . '/.git')) {
+        if (! is_dir($this->packagePath.'/.git')) {
             $this->warnings[] = "Not a Git repository - initialize with 'git init'";
+
             return;
         }
 
         echo "  ✅ Git repository initialized\n";
 
         // Check for GitHub Actions
-        if (is_dir($this->packagePath . '/.github/workflows')) {
+        if (is_dir($this->packagePath.'/.github/workflows')) {
             echo "  ✅ GitHub Actions configured\n";
         } else {
-            $this->warnings[] = "Consider adding GitHub Actions for CI/CD";
+            $this->warnings[] = 'Consider adding GitHub Actions for CI/CD';
         }
 
         echo "\n";
@@ -233,7 +237,7 @@ class PrePublishChecker
     private function displayResults(): void
     {
         echo "📊 Pre-publication Check Results\n";
-        echo str_repeat("=", 50) . "\n\n";
+        echo str_repeat('=', 50)."\n\n";
 
         if (empty($this->errors) && empty($this->warnings)) {
             echo "🎉 Congratulations! Your package is ready for publication!\n";
@@ -243,10 +247,11 @@ class PrePublishChecker
             echo "   2. Create a release tag (e.g., v1.0.0)\n";
             echo "   3. Submit to Packagist\n";
             echo "   4. Promote in the community\n";
+
             return;
         }
 
-        if (!empty($this->errors)) {
+        if (! empty($this->errors)) {
             echo "❌ ERRORS (must fix before publishing):\n";
             foreach ($this->errors as $error) {
                 echo "   • {$error}\n";
@@ -254,7 +259,7 @@ class PrePublishChecker
             echo "\n";
         }
 
-        if (!empty($this->warnings)) {
+        if (! empty($this->warnings)) {
             echo "⚠️  WARNINGS (recommended to fix):\n";
             foreach ($this->warnings as $warning) {
                 echo "   • {$warning}\n";
@@ -262,7 +267,7 @@ class PrePublishChecker
             echo "\n";
         }
 
-        if (!empty($this->errors)) {
+        if (! empty($this->errors)) {
             echo "🔧 Please fix the errors above before publishing.\n";
         } else {
             echo "✅ No critical errors found. You can publish, but consider addressing the warnings.\n";
@@ -271,7 +276,7 @@ class PrePublishChecker
 }
 
 // Run the check
-$checker = new PrePublishChecker();
+$checker = new PrePublishChecker;
 $success = $checker->runAllChecks();
 
 exit($success ? 0 : 1);

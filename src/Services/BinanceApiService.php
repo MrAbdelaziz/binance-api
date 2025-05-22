@@ -2,21 +2,25 @@
 
 namespace MrAbdelaziz\BinanceApi\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
 use MrAbdelaziz\BinanceApi\Exceptions\BinanceApiException;
-use MrAbdelaziz\BinanceApi\Traits\HasSignature;
 use MrAbdelaziz\BinanceApi\Traits\HasRateLimit;
+use MrAbdelaziz\BinanceApi\Traits\HasSignature;
 
 class BinanceApiService
 {
-    use HasSignature, HasRateLimit;
+    use HasRateLimit, HasSignature;
 
     protected array $config;
+
     protected AccountService $accountService;
+
     protected OrderService $orderService;
+
     protected MarketService $marketService;
+
     protected PositionService $positionService;
 
     public function __construct(array $config = [])
@@ -69,7 +73,7 @@ class BinanceApiService
         return $this->positionService;
     }
 
-    public function getConfig(string $key = null)
+    public function getConfig(?string $key = null)
     {
         if ($key === null) {
             return $this->config;
@@ -85,15 +89,15 @@ class BinanceApiService
     {
         $this->checkRateLimit();
 
-        $url = $this->config['base_url'] . '/api/v3' . $endpoint;
+        $url = $this->config['base_url'].'/api/v3'.$endpoint;
 
         try {
             $response = Http::timeout($this->config['timeout'])
                 ->get($url, $params);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 throw new BinanceApiException(
-                    'API request failed: ' . $response->body(),
+                    'API request failed: '.$response->body(),
                     $response->status(),
                     $response->json()
                 );
@@ -123,7 +127,7 @@ class BinanceApiService
                 throw $e;
             }
 
-            throw new BinanceApiException('Request failed: ' . $e->getMessage(), 0, null, $e);
+            throw new BinanceApiException('Request failed: '.$e->getMessage(), 0, null, $e);
         }
     }
 
@@ -145,7 +149,7 @@ class BinanceApiService
         $signature = $this->createSignature($params, $this->config['api_secret']);
         $params['signature'] = $signature;
 
-        $url = $this->config['base_url'] . '/api/v3' . $endpoint;
+        $url = $this->config['base_url'].'/api/v3'.$endpoint;
 
         $headers = [
             'X-MBX-APIKEY' => $this->config['api_key'],
@@ -163,10 +167,10 @@ class BinanceApiService
                 $response = $response->get($url, $params);
             }
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 $errorData = $response->json();
                 throw new BinanceApiException(
-                    $errorData['msg'] ?? 'API request failed: ' . $response->body(),
+                    $errorData['msg'] ?? 'API request failed: '.$response->body(),
                     $errorData['code'] ?? $response->status(),
                     $errorData
                 );
@@ -198,7 +202,7 @@ class BinanceApiService
                 throw $e;
             }
 
-            throw new BinanceApiException('Request failed: ' . $e->getMessage(), 0, null, $e);
+            throw new BinanceApiException('Request failed: '.$e->getMessage(), 0, null, $e);
         }
     }
 
@@ -246,13 +250,13 @@ class BinanceApiService
 
     protected function shouldLogRequests(): bool
     {
-        return $this->config['logging']['enabled'] ?? false 
+        return $this->config['logging']['enabled'] ?? false
             && $this->config['logging']['log_requests'] ?? false;
     }
 
     protected function shouldLogErrors(): bool
     {
-        return $this->config['logging']['enabled'] ?? true 
+        return $this->config['logging']['enabled'] ?? true
             && $this->config['logging']['log_errors'] ?? true;
     }
 
