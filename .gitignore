@@ -1,0 +1,34 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Composer
+vendor/
+composer.lock
+
+# Environment
+.env
+.env.*
+
+# Testing
+coverage/
+.phpunit.result.cache
+phpunit.xml
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+
+# Cache
+bootstrap/cache/
+storage/
+/PACKAGE_COMPLETION_STEPS.md
