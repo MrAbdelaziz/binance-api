@@ -1,7 +1,6 @@
 # Binance API Package for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/MrAbdelaziz/binance-api.svg?style=flat-square)](https://packagist.org/packages/MrAbdelaziz/binance-api)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/MrAbdelaziz/binance-api/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/MrAbdelaziz/binance-api/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/MrAbdelaziz/binance-api/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/MrAbdelaziz/binance-api/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/MrAbdelaziz/binance-api.svg?style=flat-square)](https://packagist.org/packages/MrAbdelaziz/binance-api)
 
